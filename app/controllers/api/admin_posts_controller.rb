@@ -62,7 +62,7 @@ class Api::AdminPostsController < AuthBaseController
   
   private
   def admin_post_params
-    params.permit(:is_active, :title, :description, :user_id)
+    params.permit(:title, :description)
   end
 
   def find_post_by_id

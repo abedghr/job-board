@@ -6,6 +6,7 @@ class UsersRepository
   
   def create(params)
     user = User.new(params)
+    user.registration = true
     user.role = UserRolesEnums::JOB_SEEKER
     user.save
     return user

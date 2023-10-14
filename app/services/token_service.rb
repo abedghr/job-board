@@ -10,11 +10,14 @@ class TokenService
   def login(filter, params)
     user = findOneBy(filter)
 
-    if user && user.authenticate(params[:password])
-      token = encode_token(user.id)
-      return {error: false, errors_full_messages: nil, user: user, token: token}
-    end
+    if user
+      if user.authenticate(params[:password])
+        token = encode_token(user.id)
+        return {error: false, errors_full_messages: nil, user: user, token: token}
+      end
       return {error: true, errors_full_messages: user.errors.full_messages , user: nil, token: nil}
+    end
+    return {error: true, errors_full_messages: "Invalid email or password" , user: nil, token: nil}
   end
 
   def register(params)
