@@ -1,0 +1,11 @@
+development:
+  jwt_secret_key: b8bd58d7f46c0dc5ab46b90fc75eb23f8dd7c032c51c98c163a0c234f8a253b397248cb754b92e0a1a75cc3d644a5500a8734b753cc93436ab4a00fa0b56951c
+  default_page_param: 1
+  default_limit_param: 25
+  max_limit_param_value: 100
+
+production:
+  jwt_secret_key: <ADD_JWT_SECRET_KEY>
+  default_page_param: 1
+  default_limit_param: 25
+  max_limit_param_value: 100

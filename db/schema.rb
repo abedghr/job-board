@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_11_200658) do
+ActiveRecord::Schema.define(version: 2023_10_12_180603) do
+
+  create_table "applications", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.string "status", limit: 100, default: "not-seen", null: false
+    t.datetime "seen_at"
+    t.string "resume", limit: 1000
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_applications_on_post_id"
+    t.index ["user_id"], name: "index_applications_on_user_id"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -31,5 +43,7 @@ ActiveRecord::Schema.define(version: 2023_10_11_200658) do
     t.string "password_digest"
   end
 
+  add_foreign_key "applications", "posts"
+  add_foreign_key "applications", "users"
   add_foreign_key "posts", "users"
 end

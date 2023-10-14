@@ -1,0 +1,2 @@
+class PublicBaseController < BaseController
+end
