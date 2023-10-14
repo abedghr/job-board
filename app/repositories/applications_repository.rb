@@ -11,8 +11,7 @@ class ApplicationsRepository
   end
 
   def findByUser(current_user, page, limit, joins = true)
-    # result = current_user.applications.order(seen_at: :desc, created_at: :desc).paginate(page: page, per_page: limit)
-    query = current_user.applications
+    query = current_user.applications.default_selector
     if joins
       query.includes(:user, :post)
     end
@@ -30,8 +29,10 @@ class ApplicationsRepository
     }
   end
   
-  def findAll(page, limit, joins = true)
-    query = Application
+  def findAll(page, limit, filters = {}, joins = true)
+    query = Application.default_selector
+    
+    query = apply_filters(query, filters) if !filters.empty?
     
     if joins
       query.includes(:user, :post)
@@ -59,5 +60,17 @@ class ApplicationsRepository
   def update(application, params, joins = true)
     application.update(params)
     return application
+  end
+
+  private
+
+  def apply_filters(query, filters)
+    filters.each do |key, value|
+      next if value.blank?
+      next unless Application.column_names.include?(key.to_s)
+      query = query.where(key => value)
+    end
+  
+    query
   end
 end

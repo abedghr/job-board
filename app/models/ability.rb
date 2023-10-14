@@ -1,5 +1,3 @@
-require "./app/enums/user_roles_enums.rb"
-
 class Ability
   include CanCan::Ability
 

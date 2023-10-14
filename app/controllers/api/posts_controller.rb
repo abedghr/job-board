@@ -7,16 +7,16 @@ class Api::PostsController < AuthBaseController
     limit = getLimitParam()
     posts_service = DependencyContainer[:posts_service]
 
-    @posts = @posts_service.findActive(page, limit)
+    result = @posts_service.findActive(page, limit)
     
-    next_page = @posts.next_page
+    next_page = result[:next_page]
     offset = getOffset(next_page, limit)
 
     # The API URL for the next page
     next_page_url = next_page ? api_posts_url(page: next_page, limit: limit) : nil
 
     response_data = {
-      data: @posts,
+      data: PostMapper.map(result[:data]),
       next: next_page_url.present? ? { url: next_page_url, offset: offset } : nil
     }
 

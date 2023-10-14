@@ -15,7 +15,7 @@ class Api::ApplicationsController < AuthBaseController
     next_page_url = next_page ? api_applications_url(page: next_page, limit: limit) : nil
 
     response_data = {
-      data: result[:data],
+      data: ApplicationMapper.map(result[:data]),
       next: next_page_url.present? ? { url: next_page_url, offset: offset } : nil
     }
 
@@ -25,7 +25,8 @@ class Api::ApplicationsController < AuthBaseController
   def create
     result = @applications_service.create(@current_user, application_params)
     if result.errors.empty?
-      render json: result.with_joins, status: :created
+      serialized_result = ApplicationMapper.map(result.with_joins_json)
+      render json: serialized_result, status: :created
     else
       render json: { errors: result.errors.full_messages }, status: :unprocessable_entity
     end
@@ -34,7 +35,7 @@ class Api::ApplicationsController < AuthBaseController
   def show
     result = @applications_service.findOneBy({id: params[:id]})
     if result
-      render json: result, status: :ok
+      render json: ApplicationMapper.map(result), status: :ok
     else
       render json: { error: 'Application not found' }, status: :not_found
     end

@@ -7,12 +7,12 @@ class PostsService
     return @post_repository.findOneBy(filter)
   end
   
-  def findAll(page, limit, joins = true)
-    return @post_repository.findAll(page, limit, joins = true)
+  def findAll(page, limit, filters = {}, joins = true)
+    return @post_repository.findAll(page, limit, filters, joins = true)
   end
 
   def findActive(page, limit)
-    return @post_repository.findActive(page, limit)
+    return findAll(page, limit, {is_active: true})
   end
   
   def create(current_user, params)

@@ -1,7 +1,7 @@
 class UsersRepository
 
   def findOneBy(filter)
-    return User.find_by(filter)
+    return User.default_selector.find_by(filter)
   end
   
   def create(params)

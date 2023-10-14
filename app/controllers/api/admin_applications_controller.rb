@@ -15,7 +15,7 @@ class Api::AdminApplicationsController < AuthBaseController
     next_page_url = next_page ? api_applications_url(page: next_page, limit: limit) : nil
 
     response_data = {
-      data: result[:data],
+      data: ApplicationMapper.map(result[:data]),
       next: next_page_url.present? ? { url: next_page_url, offset: offset } : nil
     }
 
@@ -25,7 +25,7 @@ class Api::AdminApplicationsController < AuthBaseController
   def show
     result = @applications_service.findOneByAdmin({id: params[:id]})
     if result
-      render json: result, status: :ok
+      render json: ApplicationMapper.map(result), status: :ok
     else
       render json: { error: 'Application not found' }, status: :not_found
     end

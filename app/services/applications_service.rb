@@ -15,8 +15,8 @@ class ApplicationsService
     return @applications_repository.findByUser(current_user, page, limit)
   end
   
-  def findAll(page, limit, joins = true)
-    return @applications_repository.findAll(page, limit, joins)
+  def findAll(page, limit, filters = {}, joins = true)
+    return @applications_repository.findAll(page, limit, filters, joins)
   end
     
   def create(current_user, params)

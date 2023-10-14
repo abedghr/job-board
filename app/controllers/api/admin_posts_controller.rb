@@ -16,7 +16,7 @@ class Api::AdminPostsController < AuthBaseController
     next_page_url = next_page ? api_posts_url(page: next_page, limit: limit) : nil
 
     response_data = {
-      data: result[:data],
+      data: PostMapper.map(result[:data]),
       next: next_page_url.present? ? { url: next_page_url, offset: offset } : nil
     }
 
@@ -27,7 +27,7 @@ class Api::AdminPostsController < AuthBaseController
     result = @posts_service.create(@current_user, admin_post_params)
 
     if result.errors.empty?
-      render json: result.with_joins_json, status: :created
+      render json: PostMapper.map(result.with_joins_json), status: :created
     else
       render json: { errors: result.errors.full_messages }, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class Api::AdminPostsController < AuthBaseController
     if @post
       result = @posts_service.update(@post, admin_post_params)
       if result.errors.empty?
-        render json: result.with_joins_json, status: :ok
+        render json: PostMapper.map(result.with_joins_json), status: :ok
       else
         render json: { errors: result.errors.full_messages }, status: :unprocessable_entity
       end

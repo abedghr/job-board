@@ -8,7 +8,11 @@ class AuthBaseController < BaseController
     token = request.headers['Authorization'].to_s.split(' ').last
     decoded = decode_token(token)
     if decoded
-      @current_user = User.find(decoded['user_id'])
+      begin
+        @current_user = User.find(decoded['user_id'])
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Unauthorized' }, status: :unauthorized
+      end
     else
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end

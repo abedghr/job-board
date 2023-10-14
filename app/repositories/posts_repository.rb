@@ -1,11 +1,13 @@
 class PostsRepository
   def findOneBy(filter)
-    return Post.find_by(filter)
+    return Post.default_selector.find_by(filter)
   end
   
-  def findAll(page, limit, joins = true)
-    query = Post
+  def findAll(page, limit, filters = {}, joins = true)
+    query = Post.default_selector
     
+    query = apply_filters(query, filters) if !filters.empty?
+
     if joins
       query.includes(:user)
     end
@@ -25,7 +27,7 @@ class PostsRepository
   end
 
   def findActive(page, limit)
-    return Post.where(is_active: true).order(created_at: :desc).paginate(page: page, per_page: limit)
+    return Post.default_selector.where(is_active: true).order(created_at: :desc).paginate(page: page, per_page: limit)
   end
   
   def create(current_user, params)
@@ -42,5 +44,16 @@ class PostsRepository
   def delete(post)
     post.destroy
     return post
+  end
+
+  private
+  def apply_filters(query, filters)
+    filters.each do |key, value|
+      next if value.blank?
+      next unless Post.column_names.include?(key.to_s)
+      query = query.where(key => value)
+    end
+  
+    query
   end
 end

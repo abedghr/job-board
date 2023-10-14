@@ -1,5 +1,3 @@
-require "./app/enums/user_roles_enums.rb"
-
 class User < ApplicationRecord
   attr_accessor :registration
 
@@ -20,4 +18,6 @@ class User < ApplicationRecord
   has_secure_password
   has_many :posts
   has_many :applications
+
+  scope :default_selector, -> { select("id, email, password_digest, role, created_at") }
 end
