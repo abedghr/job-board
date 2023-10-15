@@ -45,3 +45,7 @@ gem 'cancancan', '3.5.0'
 # JSON Web Tokens (JWT) for authentication
 gem 'jwt', '2.2.3'
 gem 'will_paginate'
+
+# Gemfile
+gem 'rswag-api'
+gem 'rswag-ui'
