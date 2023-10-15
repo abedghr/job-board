@@ -63,6 +63,32 @@ paths:
                     $ref: '#/components/schemas/User' # Reference to the User schema
         '401':
           description: Unauthorized
+  /api/refresh:
+    post:
+      tags:
+        - "Authentication"
+      summary: Refresh Token
+      description: Generate new Tokens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRefreshRequest' # Reference to the request schema
+      responses:
+        '200':
+          description: User authenticated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth_token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User' # Reference to the User schema
+        '401':
+          description: Unauthorized
   /api/users:
     get:
       tags:
@@ -548,6 +574,13 @@ components:
       required:
         - email
         - password
+    UserRefreshRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+      required:
+        - refresh_token
     PostCreateRequest:
       type: object
       properties:

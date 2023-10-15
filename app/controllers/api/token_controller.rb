@@ -5,7 +5,7 @@ class Api::TokenController < PublicBaseController
   def register
     result = @token_service.register(user_params)
     if !result[:error]
-      render json: { auth_token: result[:token], user: UserMapper.map(result[:user]) }, status: :created
+      render json: { auth_token: result[:token], refresh_token: result[:refresh_token], user: UserMapper.map(result[:user]) }, status: :created
     else
       render json: { errors: result[:errors_full_messages] }, status: :unprocessable_entity
     end
@@ -14,12 +14,21 @@ class Api::TokenController < PublicBaseController
   def login
     result = @token_service.login({email: params[:email]}, params)
     if !result[:error]
-      render json: { auth_token: result[:token], user: UserMapper.map(result[:user]) }, status: :ok
+      render json: { auth_token: result[:token], refresh_token: result[:refresh_token], user: UserMapper.map(result[:user]) }, status: :ok
     else
       render json: { error: 'Invalid email or password' }, status: :unauthorized
     end
   end
 
+  def refresh
+    result = @token_service.refreshToken(params[:refresh_token])
+    if !result[:error]
+      render json: { auth_token: result[:token], refresh_token: result[:refresh_token], user: UserMapper.map(result[:user]) }, status: :ok
+    else
+      render json: { errors: result[:errors_full_messages] }, status: :unauthorized
+    end
+  end
+  
   private
 
   def user_params

@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     resources :admin_applications
     post 'register', to: 'token#register'
     post 'login', to: 'token#login'
+    post 'refresh', to: 'token#refresh'
   end
 end

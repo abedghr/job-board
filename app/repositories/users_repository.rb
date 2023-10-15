@@ -1,7 +1,13 @@
 class UsersRepository
 
-  def findOneBy(filter)
-    return User.default_selector.find_by(filter)
+  def findOneBy(filter, with_selector = true)
+    Rails.logger.debug("with_selectorwith_selectorwith_selector: #{with_selector}")
+
+    if with_selector
+      return User.default_selector.find_by(filter)
+    else
+      return User.find_by(filter)
+    end
   end
   
   def create(params)
